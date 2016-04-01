@@ -33,7 +33,7 @@ CommandBuffer::CommandBuffer(Device &device) : Device(device)
     sharedConstructor();
 }
 
-CommandBuffer::CommandBuffer(Device &device, Program &program, Arguments &arguments);
+//CommandBuffer::CommandBuffer(Device &device, Program &program, Arguments &arguments);
 
 void CommandBuffer::destroy()
 {

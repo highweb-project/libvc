@@ -4,7 +4,18 @@ namespace vc {
 
 DevicePool::DevicePool()
 {
-    VkInstanceCreateInfo instanceCreateInfo = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
+	VkApplicationInfo appInfo = {};
+	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	appInfo.pApplicationName = "libvc";
+	appInfo.pEngineName = "libvc";
+	appInfo.apiVersion = VK_API_VERSION;
+
+	VkInstanceCreateInfo instanceCreateInfo = {};
+	instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	instanceCreateInfo.pNext = NULL;
+	instanceCreateInfo.pApplicationInfo = &appInfo;
+
+    //VkInstanceCreateInfo instanceCreateInfo = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
     if (VK_SUCCESS != vkCreateInstance(&instanceCreateInfo, nullptr, &instance)) {
         throw ERROR_INSTANCE;
     }

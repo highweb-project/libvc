@@ -24,6 +24,7 @@ void CommandBuffer::sharedConstructor()
 CommandBuffer::CommandBuffer(Device &device, Program &program, Arguments &arguments) : Device(device)
 {
     sharedConstructor();
+	this->begin();
     arguments.bindTo(*this);
     program.bindTo(*this);
 }

@@ -4,12 +4,30 @@ namespace vc {
 
 Program::Program(Device &device, const char *fileName, std::vector<ResourceType> resourceTypes) : Device(device)
 {
-    std::ifstream fin(fileName, std::ifstream::ate);
-    size_t byteLength = fin.tellg();
-    fin.seekg(0, std::ifstream::beg);
-    char *data = new char[byteLength];
-    fin.read(data, byteLength);
-    fin.close();
+    //std::ifstream fin(fileName, std::ifstream::ate);
+    //size_t byteLength = fin.tellg();
+    //fin.seekg(0, std::ifstream::beg);
+    //char *data = new char[byteLength];
+    //fin.read(data, byteLength);
+    //fin.close();
+
+	size_t byteLength;
+	void* data;
+	FILE* fp = fopen(fileName, "rb");
+	if (!fp) {
+		throw ERROR_SHADER;
+	}
+
+	fseek(fp, 0L, SEEK_END);
+	byteLength = ftell(fp);
+	fseek(fp, 0L, SEEK_SET);
+	data = malloc(byteLength);
+	int ret = fread(data, byteLength, 1, fp);
+	if (!ret) {
+		throw ERROR_SHADER;
+	}
+
+	fclose(fp);
 
     VkShaderModuleCreateInfo shaderModuleCreateInfo = {VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
     shaderModuleCreateInfo.codeSize = byteLength;

@@ -18,7 +18,7 @@ int main()
             Buffer buffer(device, sizeof(double) * 10240);
             buffer.fill(0);
 
-            Program program(device, "/home/alexhultman/libvc/shaders/comp.spv", {BUFFER});
+            Program program(device, "C:\\simple.spv", {BUFFER});
             Arguments args(program, {buffer});
 
             CommandBuffer commands(device, program, args);

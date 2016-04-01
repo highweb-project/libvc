@@ -12,6 +12,9 @@ private:
     VkDeviceMemory memory;
     VkBuffer buffer;
 
+	size_t bufferSize;
+	uint32_t findMemoryTypeFromRequirements(uint32_t hostRequirements);
+
 public:
     Buffer(Device &device, size_t byteSize, bool mappable = false);
     void fill(uint32_t value);

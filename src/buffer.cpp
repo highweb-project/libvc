@@ -19,7 +19,8 @@ Buffer::Buffer(Device &device, size_t byteSize, bool mappable) : Device(device)
     // allocate memory for the buffer
     VkMemoryAllocateInfo memoryAllocateInfo = {VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = mappable ? memoryTypeMappable : memoryTypeLocal;
+    //memoryAllocateInfo.memoryTypeIndex = mappable ? memoryTypeMappable : memoryTypeLocal;
+	memoryAllocateInfo.memoryTypeIndex = findMemoryTypeFromRequirements(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
     if (VK_SUCCESS != vkAllocateMemory(this->device, &memoryAllocateInfo, nullptr, &memory)) {
         throw ERROR_MALLOC;
     }
@@ -32,11 +33,35 @@ Buffer::Buffer(Device &device, size_t byteSize, bool mappable) : Device(device)
 
 void Buffer::fill(uint32_t value)
 {
-    implicitCommandBuffer->begin();
-    vkCmdFillBuffer(*implicitCommandBuffer, buffer, 0, VK_WHOLE_SIZE, value);
-    implicitCommandBuffer->end();
-    submit(*implicitCommandBuffer);
-    wait();
+    //implicitCommandBuffer->begin();
+    //vkCmdFillBuffer(*implicitCommandBuffer, buffer, 0, VK_WHOLE_SIZE, value);
+    //implicitCommandBuffer->end();
+    //submit(*implicitCommandBuffer);
+    //wait();
+
+	VkResult err;
+
+	void* deviceMemoryPtr = nullptr;
+	err = vkMapMemory(device, memory, 0, 10240, 0, &deviceMemoryPtr);
+
+	double* testData = new double[10240];
+	for (size_t i = 0; i < 10240; i++) {
+		testData[i] = value;
+	}
+
+	memcpy(deviceMemoryPtr, testData, sizeof(double) * 10240);
+	vkUnmapMemory(device, memory);
+}
+
+uint32_t Buffer::findMemoryTypeFromRequirements(uint32_t hostRequirements)
+{
+	VkPhysicalDeviceMemoryProperties props;
+	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &props);
+	for (uint32_t i = 0; i < VK_MAX_MEMORY_TYPES; i++) {
+		if ((props.memoryTypes[i].propertyFlags & hostRequirements) == hostRequirements) {
+			return i;
+		}
+	}
 }
 
 void Buffer::enqueueCopy(Buffer src, Buffer dst, size_t byteSize, VkCommandBuffer commandBuffer)

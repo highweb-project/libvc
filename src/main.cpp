@@ -22,10 +22,8 @@ int main()
             Arguments args(program, {buffer});
 
             CommandBuffer commands(device, program, args);
-            for (int i = 0; i < 100000; i++) {
-                commands.dispatch(10);
-                commands.barrier();
-            }
+            commands.dispatch(40);
+            commands.barrier();
             commands.end();
 
             // time the execution on the GPU
@@ -48,6 +46,7 @@ int main()
             for (int i = 1; i < 10240; i++) {
                 if (results[i] != results[i - 1]) {
                     cout << "Corruption at " << i << ": " << results[i] << " != " << results[i - 1] << endl;
+					getchar();
                     return -1;
                 }
             }
@@ -57,5 +56,6 @@ int main()
     }
 
     cout << "OK" << endl;
+	getchar();
     return 0;
 }

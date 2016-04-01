@@ -16,7 +16,7 @@ int main()
 
         try {
             Buffer buffer(device, sizeof(double) * 10240);
-            buffer.fill(0);
+            buffer.fill(10);
 
             Program program(device, "C:\\simple.spv", {BUFFER});
             Arguments args(program, {buffer});

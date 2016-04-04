@@ -16,14 +16,16 @@ int main()
 
         try {
             Buffer buffer(device, sizeof(double) * 10240);
-            buffer.fill(10);
+            buffer.fill(0);
 
             Program program(device, "C:\\simple.spv", {BUFFER});
             Arguments args(program, {buffer});
 
             CommandBuffer commands(device, program, args);
-            commands.dispatch(40);
-            commands.barrier();
+			for (int i = 0; i < 50000; i++) {
+				commands.dispatch(40);
+				commands.barrier();
+			}
             commands.end();
 
             // time the execution on the GPU

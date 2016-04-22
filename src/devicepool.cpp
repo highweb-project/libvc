@@ -8,7 +8,8 @@ DevicePool::DevicePool()
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	appInfo.pApplicationName = "libvc";
 	appInfo.pEngineName = "libvc";
-	appInfo.apiVersion = VK_API_VERSION;
+	//appInfo.apiVersion = VK_API_VERSION;
+	appInfo.apiVersion = VK_MAKE_VERSION(1,0,5);
 
 	VkInstanceCreateInfo instanceCreateInfo = {};
 	instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;

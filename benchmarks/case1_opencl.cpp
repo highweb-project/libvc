@@ -6,10 +6,10 @@ using namespace std;
 using namespace chrono;
 
 #define BUFFER_SIZE 10240
-#define INCREMENT_PASSES 100000
+#define INCREMENT_PASSES 500000
 #define RUNS 5
 
-const char *source = "kernel void f(global double *output) { output[get_global_id(0)] += 1.0; }";
+const char *source = "kernel void f(global double *output) { output[get_global_id(0)] += 2.0; }";
 
 int main(int argc, char** argv)
 {
@@ -54,7 +54,8 @@ int main(int argc, char** argv)
 
     clEnqueueReadBuffer(commands, output, CL_TRUE, 0, sizeof(data), data, 0, nullptr, nullptr);
 
-    if (int(data[0] + 0.5) != INCREMENT_PASSES * RUNS) {
+    cout << "data[0] : " << data[0] << endl;
+    if (int(data[0] + 0.5) != INCREMENT_PASSES * RUNS * 2) {
         cout << "Mismatching result!" << endl;
         return -3;
     }

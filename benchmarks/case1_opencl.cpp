@@ -1,3 +1,4 @@
+#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
 #include <CL/cl.h>
 
 #include <iostream>
@@ -6,7 +7,7 @@ using namespace std;
 using namespace chrono;
 
 #define BUFFER_SIZE 10240
-#define INCREMENT_PASSES 500000
+#define INCREMENT_PASSES 50000
 #define RUNS 5
 
 const char *source = "kernel void f(global double *output) { output[get_global_id(0)] += 2.0; }";
@@ -40,7 +41,7 @@ int main(int argc, char** argv)
     clSetKernelArg(kernel, 0, sizeof(cl_mem), &output);
 
     size_t global = BUFFER_SIZE;
-    size_t local = 1024;
+    size_t local = 256;
 
     for (int i = 0; i < RUNS; i++) {
         steady_clock::time_point start = steady_clock::now();
@@ -74,5 +75,6 @@ int main(int argc, char** argv)
     clReleaseKernel(kernel);
     clReleaseCommandQueue(commands);
     clReleaseContext(context);
+	getchar();
     return 0;
 }

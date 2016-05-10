@@ -22,10 +22,10 @@ int main()
             Arguments args(program, {buffer});
 
             CommandBuffer commands(device, program, args);
-			for (int i = 0; i < 50000; i++) {
-				commands.dispatch(40);
-				commands.barrier();
-			}
+                for (int i = 0; i < 50000; i++) {
+                    commands.dispatch(40);
+                    commands.barrier();
+                }
             commands.end();
 
             // time the execution on the GPU
@@ -58,6 +58,6 @@ int main()
     }
 
     cout << "OK" << endl;
-	getchar();
+    getchar();
     return 0;
 }

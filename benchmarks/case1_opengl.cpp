@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <GL/glut.h>
+#if defined _WIN32
+#include <GL/glew.h>
+#endif
 
 using namespace std;
 using namespace chrono;
@@ -32,6 +35,10 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(0, 0);
 	glutCreateWindow("Test Window");
+
+#if defined _WIN32
+	GLenum err = glewInit();
+#endif
 
 	GLuint compute_shader = 0;
 	GLuint compute_program = 0;
@@ -90,6 +97,7 @@ int main(int argc, char** argv) {
 	}
 
 	cout << "OK" << endl;
+	getchar();
 
 	return 0;
 }

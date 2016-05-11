@@ -3,10 +3,10 @@
 #include <chrono>
 #include <iostream>
 #include <vector>
-#include <GL/glut.h>
 #if defined _WIN32
 #include <GL/glew.h>
 #endif
+#include <GL/glut.h>
 
 using namespace std;
 using namespace chrono;

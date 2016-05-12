@@ -1,4 +1,4 @@
-#define GL_GLEXT_PROTOTYPES
+﻿#define GL_GLEXT_PROTOTYPES
 
 #include <chrono>
 #include <iostream>
@@ -38,6 +38,12 @@ int main(int argc, char** argv) {
 
 #if defined _WIN32
 	GLenum err = glewInit();
+
+	cout << "GLEW_VERSION : " << glewGetString(GLEW_VERSION) << endl;
+	cout << "GL_VERSION : " << glGetString(GL_VERSION) << endl;
+	cout << "GL_VENDOR : " << glGetString(GL_VENDOR) << endl;
+	cout << "GL_RENDERER : " << glGetString(GL_RENDERER) << endl;
+	cout << "GL_SHADING_LANGUAGE_VERSION : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 #endif
 
 	GLuint compute_shader = 0;

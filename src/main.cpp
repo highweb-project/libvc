@@ -35,10 +35,12 @@ int main()
 
             // time the execution on the GPU
             for (int i = 0; i < 5; i++) {
-                steady_clock::time_point start = steady_clock::now();
+                steady_clock::time_point submit = steady_clock::now();
                 device.submit(commands);
+				cout << "vkQueueSubmit elapsed : " << duration_cast<milliseconds>(steady_clock::now() - submit).count() << "ms" << endl;
+				steady_clock::time_point wait = steady_clock::now();
                 device.wait();
-                cout << duration_cast<milliseconds>(steady_clock::now() - start).count() << "ms" << endl;
+				cout << "vkQueueWaitIdle elapsed : " << duration_cast<milliseconds>(steady_clock::now() - wait).count() << "ms" << endl;
             }
 
             double results[10240];

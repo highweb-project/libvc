@@ -73,9 +73,21 @@ void Device::submit(VkCommandBuffer commandBuffer)
     submitInfo.commandBufferCount = 1;
     VkCommandBuffer commandBuffers[1] = {commandBuffer};
     submitInfo.pCommandBuffers = commandBuffers;
-    if (VK_SUCCESS != vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE)) {
+
+	// Fence Test
+	VkFence fence = VK_NULL_HANDLE;
+	//VkFenceCreateInfo fenceCreateInfo = { VK_STRUCTURE_TYPE_FENCE_CREATE_INFO };
+	//fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	//vkCreateFence(device, &fenceCreateInfo, nullptr, &fence);
+
+    if (VK_SUCCESS != vkQueueSubmit(queue, 1, &submitInfo, fence)) {
         throw ERROR_DEVICES;
     }
+
+	if (fence != VK_NULL_HANDLE) {
+		vkWaitForFences(device, 1, &fence, VK_TRUE, 100000000000);
+		vkDestroyFence(device, fence, nullptr);
+	}
 }
 
 void Device::wait()

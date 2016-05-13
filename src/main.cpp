@@ -5,6 +5,7 @@ using namespace vc;
 #include <iostream>
 #include <iomanip>
 #include <chrono>
+#include <string>
 using namespace std;
 using namespace chrono;
 
@@ -18,7 +19,11 @@ int main()
             Buffer buffer(device, sizeof(double) * 10240);
             buffer.fill(0);
 
-            Program program(device, "./shaders/simple.spv", {BUFFER});
+            string path = "./shaders/simple.spv";
+#if defined (_WIN32)
+            path = "..\\..\\shaders\\simple.spv";
+#endif
+            Program program(device, path.c_str(), {BUFFER});
             Arguments args(program, {buffer});
 
             CommandBuffer commands(device, program, args);

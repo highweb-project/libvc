@@ -1,4 +1,5 @@
 #include "devicepool.h"
+#include "vulkandebug.h"
 
 namespace vc {
 
@@ -16,10 +17,18 @@ DevicePool::DevicePool()
 	instanceCreateInfo.pNext = NULL;
 	instanceCreateInfo.pApplicationInfo = &appInfo;
 
+	std::vector<const char*> enabledExtensions = { VK_EXT_DEBUG_REPORT_EXTENSION_NAME };
+	instanceCreateInfo.enabledExtensionCount = (uint32_t)enabledExtensions.size();
+	instanceCreateInfo.ppEnabledExtensionNames = enabledExtensions.data();
+	instanceCreateInfo.enabledLayerCount = vkDebug::validationLayerCount;
+	instanceCreateInfo.ppEnabledLayerNames = vkDebug::validationLayerNames;
+
     //VkInstanceCreateInfo instanceCreateInfo = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
     if (VK_SUCCESS != vkCreateInstance(&instanceCreateInfo, nullptr, &instance)) {
         throw ERROR_INSTANCE;
     }
+
+	vkDebug::setupDebugging(instance, VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT, NULL);
 
     uint32_t numDevices;
     if (VK_SUCCESS != vkEnumeratePhysicalDevices(instance, &numDevices, nullptr) || !numDevices) {

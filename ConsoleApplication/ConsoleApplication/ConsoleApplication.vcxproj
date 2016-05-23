@@ -161,6 +161,7 @@
     <ClInclude Include="..\..\include\devicepool.h" />
     <ClInclude Include="..\..\include\program.h" />
     <ClInclude Include="..\..\include\vc.h" />
+    <ClInclude Include="..\..\include\vulkandebug.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -172,6 +173,7 @@
     <ClCompile Include="..\..\src\devicepool.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\program.cpp" />
+    <ClCompile Include="..\..\src\vulkandebug.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

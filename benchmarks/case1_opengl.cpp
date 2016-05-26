@@ -67,21 +67,24 @@ int main(int argc, char** argv) {
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, BUFFER_SIZE * sizeof(GLdouble), &data[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, SSBO);
+
+
+	steady_clock::time_point start = steady_clock::now();
 	for(int i = 0; i < RUNS; i++) {
-		steady_clock::time_point start = steady_clock::now();
 		for(int j = 0; j < INCREMENT_PASSES; j++) {
 			glDispatchCompute(BUFFER_SIZE / 256, 1, 1);
 			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 		}
-		cout << i + 1 << ": " << duration_cast<milliseconds>(steady_clock::now() - start).count() << "ms" << endl;
 	}
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
 
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
+
 	GLdouble *ptr;
 	ptr = (GLdouble *) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_READ_ONLY);
+	cout << "elapsed: " << duration_cast<milliseconds>(steady_clock::now() - start).count() << "ms" << endl;
+
 	data.clear();
 	for (int i = 0; i < BUFFER_SIZE; i++){
 	    data.push_back(ptr[i]);

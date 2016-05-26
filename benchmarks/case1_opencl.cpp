@@ -43,17 +43,17 @@ int main(int argc, char** argv)
     size_t global = BUFFER_SIZE;
     size_t local = 256;
 
+    steady_clock::time_point start = steady_clock::now();
     for (int i = 0; i < RUNS; i++) {
-        steady_clock::time_point start = steady_clock::now();
         for (int i = 0; i < INCREMENT_PASSES; i++) {
             clEnqueueNDRangeKernel(commands, kernel, 1, nullptr, &global, &local, 0, nullptr, nullptr);
             clEnqueueBarrier(commands);
         }
         clFinish(commands);
-        cout << i + 1 << ": " << duration_cast<milliseconds>(steady_clock::now() - start).count() << "ms" << endl;
     }
 
     clEnqueueReadBuffer(commands, output, CL_TRUE, 0, sizeof(data), data, 0, nullptr, nullptr);
+    cout << "elapsed: " << duration_cast<milliseconds>(steady_clock::now() - start).count() << "ms" << endl;
 
     cout << "data[0] : " << data[0] << endl;
     if (int(data[0] + 0.5) != INCREMENT_PASSES * RUNS * 2) {

@@ -9,6 +9,10 @@ using namespace vc;
 using namespace std;
 using namespace chrono;
 
+#define BUFFER_SIZE 10240
+#define INCREMENT_PASSES 50000
+#define RUNS 5
+
 int main()
 {
     DevicePool devicePool;
@@ -16,7 +20,7 @@ int main()
         cout << "[" << device.getName() << "]" << endl;
 
         try {
-            Buffer buffer(device, sizeof(double) * 10240);
+            Buffer buffer(device, sizeof(double) * BUFFER_SIZE);
             buffer.fill(0);
 
             string path = "./shaders/simple.spv";
@@ -27,23 +31,21 @@ int main()
             Arguments args(program, {buffer});
 
             CommandBuffer commands(device, program, args);
-                for (int i = 0; i < 50000; i++) {
-                    commands.dispatch(40);
+                for (int i = 0; i < INCREMENT_PASSES; i++) {
+                    commands.dispatch(BUFFER_SIZE / 256);
                     commands.barrier();
                 }
             commands.end();
 
             // time the execution on the GPU
-            for (int i = 0; i < 5; i++) {
-                steady_clock::time_point submit = steady_clock::now();
+            steady_clock::time_point start = steady_clock::now();
+            for (int i = 0; i < RUNS; i++) {
                 device.submit(commands);
-				cout << "vkQueueSubmit elapsed : " << duration_cast<milliseconds>(steady_clock::now() - submit).count() << "ms" << endl;
-				steady_clock::time_point wait = steady_clock::now();
                 device.wait();
-				cout << "vkQueueWaitIdle elapsed : " << duration_cast<milliseconds>(steady_clock::now() - wait).count() << "ms" << endl;
             }
+            cout << "elapsed: " << duration_cast<milliseconds>(steady_clock::now() - start).count() << "ms" << endl;
 
-            double results[10240];
+            double results[BUFFER_SIZE];
             buffer.download(results);
 
             buffer.destroy();
@@ -52,10 +54,10 @@ int main()
             device.destroy();
 
             cout << "Scalar is: " << results[0] << endl;
-            for (int i = 1; i < 10240; i++) {
+            for (int i = 1; i < BUFFER_SIZE; i++) {
                 if (results[i] != results[i - 1]) {
                     cout << "Corruption at " << i << ": " << results[i] << " != " << results[i - 1] << endl;
-					getchar();
+                    getchar();
                     return -1;
                 }
             }

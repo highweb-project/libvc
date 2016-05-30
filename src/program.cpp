@@ -80,4 +80,12 @@ void Program::bindTo(VkCommandBuffer commandBuffer)
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline);
 }
 
+void Program::destroy()
+{
+	vkDestroyShaderModule(this->device, shaderModule, VK_NULL_HANDLE);
+	vkDestroyPipelineLayout(this->device, pipelineLayout, VK_NULL_HANDLE);
+	vkDestroyPipeline(this->device, pipeline, VK_NULL_HANDLE);
+	vkDestroyDescriptorSetLayout(this->device, descriptorSetLayout, VK_NULL_HANDLE);
+}
+
 }

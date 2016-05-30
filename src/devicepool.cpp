@@ -1,7 +1,7 @@
 #include "devicepool.h"
 #include "vulkandebug.h"
 
-#define ENABLE_VALIDATION true
+#define ENABLE_VALIDATION false
 
 namespace vc {
 

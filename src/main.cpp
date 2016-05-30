@@ -50,6 +50,7 @@ int main()
 
             buffer.destroy();
             args.destroy();
+			program.destroy();
             commands.destroy();
             device.destroy();
 

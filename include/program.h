@@ -17,6 +17,7 @@ protected:
 public:
     Program(Device &device, const char *fileName, std::vector<ResourceType> resourceTypes);
     void bindTo(VkCommandBuffer commandBuffer);
+	void destroy();
 };
 
 }

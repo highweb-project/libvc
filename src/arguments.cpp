@@ -13,6 +13,7 @@ Arguments::Arguments(Program &function, std::vector<Buffer> resources) : Program
     descriptorPoolCreateInfo.poolSizeCount = 1;
     descriptorPoolCreateInfo.maxSets = 1;
     descriptorPoolCreateInfo.pPoolSizes = descriptorPoolSizes;
+	descriptorPoolCreateInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     if (VK_SUCCESS != vkCreateDescriptorPool(device, &descriptorPoolCreateInfo, nullptr, &descriptorPool)) {
         throw ERROR_SHADER;
     }

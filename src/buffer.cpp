@@ -7,7 +7,7 @@ Buffer::Buffer(Device &device, size_t byteSize, bool mappable) : Device(device)
     // create buffer
     VkBufferCreateInfo bufferCreateInfo = {VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
     bufferCreateInfo.size = byteSize;
-    bufferCreateInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+    bufferCreateInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
     if (VK_SUCCESS != vkCreateBuffer(this->device, &bufferCreateInfo, nullptr, &buffer)) {
         throw ERROR_MALLOC;
     }

@@ -1,7 +1,7 @@
 #include "devicepool.h"
 #include "vulkandebug.h"
 
-#define ENABLE_VALIDATION false
+#define ENABLE_VALIDATION true
 
 namespace vc {
 
@@ -19,8 +19,9 @@ DevicePool::DevicePool()
 	instanceCreateInfo.pNext = NULL;
 	instanceCreateInfo.pApplicationInfo = &appInfo;
 
+	std::vector<const char*> enabledExtensions;
     if (ENABLE_VALIDATION) {
-	    std::vector<const char*> enabledExtensions = { VK_EXT_DEBUG_REPORT_EXTENSION_NAME };
+		enabledExtensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
 	    instanceCreateInfo.enabledExtensionCount = (uint32_t)enabledExtensions.size();
 	    instanceCreateInfo.ppEnabledExtensionNames = enabledExtensions.data();
 	    instanceCreateInfo.enabledLayerCount = vkDebug::validationLayerCount;
